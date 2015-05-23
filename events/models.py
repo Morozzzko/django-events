@@ -16,7 +16,7 @@ class Event(models.Model):
     end_date = models.DateTimeField(verbose_name=_('end date'))
     description = models.TextField(verbose_name=_('description'),
                                    blank=True)
-    organizer = models.ForeignKey(User, verbose_name=_('organizer'))
+    head_organizer = models.ForeignKey(User, verbose_name=_('head organizer'))
 
     def __str__(self):
         return self.name
