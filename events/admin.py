@@ -1,9 +1,18 @@
 from django.contrib import admin
 
-from .models import Event
+from .models import Event, Attendee, Organizer
 
+
+class AttendeeInline(admin.TabularInline):
+    model = Attendee
+
+class OrganizerInline(admin.TabularInline):
+    model = Organizer
 
 class EventAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        AttendeeInline,
+        OrganizerInline,
+    ]
 
-admin.site.register(Event)
+admin.site.register(Event, EventAdmin)
