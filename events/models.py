@@ -67,9 +67,9 @@ class Attendee(models.Model):
                               verbose_name=_('status'))
 
     def __str__(self):
-        return _('%(user) status on %(event): %(status)') % {
-            'user': self.user,
-            'event': self.event,
+        return _('{user} status on {event}: {status}') % {
+            'user': self.user.username,
+            'event': str(self.event),
             'status': _(self.status),
         }
 
@@ -92,9 +92,9 @@ class Organizer(models.Model):
                             verbose_name=_('role'))
 
     def __str__(self):
-        return _('%(event) organizer (%(role)) %(user) ') % {
-            'user': self.user,
-            'event': self.event,
+        return _('{event} organizer ({role}) {user} ') % {
+            'user': self.user.username,
+            'event': str(self.event),
             'role': _(self.role),
 
         }
