@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 
 
-
 @python_2_unicode_compatible
 class Event(models.Model):
     name = models.CharField(
@@ -18,11 +17,11 @@ class Event(models.Model):
     end_date = models.DateTimeField(verbose_name=_('end date'))
     description = models.TextField(verbose_name=_('description'),
                                    blank=True)
-    organizers = models.ManyToManyField(User,
-                                        through='Organizer',
-                                        through_fields=['event', 'user'],
-                                        verbose_name=_('organizers'),
-                                        related_name='event_organizers')
+    organizer_groups = models.ManyToManyField(User,
+                                              through='Organizer',
+                                              through_fields=['event', 'user'],
+                                              verbose_name=_('organizers'),
+                                              related_name='event_organizers')
 
     attendees = models.ManyToManyField(User,
                                        through='Attendee',
@@ -80,7 +79,7 @@ class Organizer(models.Model):
         HEAD = 'head'
         REGULAR = 'regular'
 
-        choices =(
+        choices = (
             (HEAD, 'head'),
             (REGULAR, 'regular')
         )
@@ -98,4 +97,3 @@ class Organizer(models.Model):
             'role': _(self.role),
 
         }
-
