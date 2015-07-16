@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from django.contrib.auth.models import User
+from django.conf import settings
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -21,13 +21,13 @@ class Event(models.Model):
     end_date = models.DateTimeField(verbose_name=_('end date'))
     description = models.TextField(verbose_name=_('description'),
                                    blank=True)
-    organizer_groups = models.ManyToManyField(User,
+    organizer_groups = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                               through='Organizer',
                                               through_fields=['event', 'user'],
                                               verbose_name=_('organizers'),
                                               related_name='event_organizers')
 
-    attendees = models.ManyToManyField(User,
+    attendees = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                        through='Attendee',
                                        through_fields=['event', 'user'],
                                        verbose_name=_('attendees'),
@@ -64,7 +64,7 @@ class Attendee(models.Model):
         )
 
     event = models.ForeignKey(Event)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(max_length=15,
                               choices=Status.choices,
                               verbose_name=_('status'))
@@ -89,7 +89,7 @@ class Organizer(models.Model):
         )
 
     event = models.ForeignKey(Event)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     role = models.CharField(max_length=15,
                             choices=Roles.choices,
                             verbose_name=_('role'))
