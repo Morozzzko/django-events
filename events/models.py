@@ -54,6 +54,11 @@ class Event(models.Model):
     end_date = models.DateTimeField(verbose_name=_('end date'))
     description = models.TextField(verbose_name=_('description'),
                                    blank=True)
+    location = models.CharField(verbose_name=_('location'),
+                                max_length=60,
+                                blank=True)
+    max_team_size = models.PositiveSmallIntegerField(verbose_name=_('maximum team size'),
+                                                     default=4)
 
     def __str__(self):
         return self.name
