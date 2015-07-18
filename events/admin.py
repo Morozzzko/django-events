@@ -1,18 +1,30 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.contrib import admin
 
-from .models import Event, Attendee, Organizer
+from django.contrib.auth.models import User
+
+from .models import Event, Profile
 
 
-class AttendeeInline(admin.TabularInline):
-    model = Attendee
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = 'profile'
 
-class OrganizerInline(admin.TabularInline):
-    model = Organizer
 
-class EventAdmin(admin.ModelAdmin):
+admin.site.unregister(User)
+
+
+@admin.register(User)
+class ProfileAdmin(admin.ModelAdmin):
     inlines = [
-        AttendeeInline,
-        OrganizerInline,
+        ProfileInline,
     ]
 
-admin.site.register(Event, EventAdmin)
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    pass

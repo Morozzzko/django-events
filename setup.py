@@ -19,6 +19,8 @@ setup(
     zip_safe=False,
     platforms=['any'],
     install_requires=[
+        'django-phonenumber-field',
+        'django-enumfield',
     ],
     classifiers=[
         'Framework :: Django',
