@@ -30,7 +30,7 @@ class PresenceStatus(enum.Enum):
 @python_2_unicode_compatible
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    additionalName = models.CharField(verbose_name=_('middle name'),
+    additional_name = models.CharField(verbose_name=_('middle name'),
                                       max_length=30,
                                       blank=True)
     telephone = PhoneNumberField(verbose_name=_('phone number'),
