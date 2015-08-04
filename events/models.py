@@ -30,11 +30,11 @@ class PresenceStatus(enum.Enum):
 @python_2_unicode_compatible
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    middleName = models.CharField(verbose_name=_('middle name'),
-                                  max_length=30,
-                                  blank=True)
-    phoneNumber = PhoneNumberField(verbose_name=_('phone number'),
-                                   blank=True)
+    additionalName = models.CharField(verbose_name=_('middle name'),
+                                      max_length=30,
+                                      blank=True)
+    telephone = PhoneNumberField(verbose_name=_('phone number'),
+                                 blank=True)
 
     status = enum.EnumField(PresenceStatus,
                             verbose_name=_('presence status'),
