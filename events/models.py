@@ -33,8 +33,8 @@ class PresenceStatus(enum.Enum):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     additional_name = models.CharField(verbose_name=_('middle name'),
-                                      max_length=30,
-                                      blank=True)
+                                       max_length=30,
+                                       blank=True)
     telephone = PhoneNumberField(verbose_name=_('phone number'),
                                  blank=True)
 
@@ -68,9 +68,30 @@ class Event(models.Model):
 
 @python_2_unicode_compatible
 class Team(models.Model):
-    group = models.OneToOneField(Group)
-
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              verbose_name=_('owner'))
+    name = models.TextField(verbose_name=_('team name'),
+                            max_length=30)
     description = models.TextField(verbose_name=_('description'))
+
+    curator = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                verbose_name=_('curator'),
+                                blank=True,
+                                null=True,
+                                related_name='team_curator')
+
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     through='TeamMembership',
+                                     related_name='team_members')
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class TeamMembership(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    team = models.ForeignKey(Team)
+
+    role = models.TextField(verbose_name=_('role'),
+                            max_length=30,
+                            blank=True)
 

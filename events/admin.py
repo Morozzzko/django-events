@@ -30,16 +30,6 @@ class EventAdmin(admin.ModelAdmin):
     pass
 
 
-class TeamInline(admin.StackedInline):
-    can_delete = True
-    model = Team
-
-
-admin.site.unregister(Group)
-
-
-@admin.register(Group)
+@admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    inlines = [
-        TeamInline,
-    ]
+    pass

@@ -22,14 +22,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class TeamSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField(source='user.pk')
-    name = serializers.CharField(source='group.name')
+class TeamSerializer(serializers.ModelSerializer):
+    curator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
+    members = serializers.HyperlinkedRelatedField(many=True, view_name='user-detail', read_only=True)
 
     class Meta:
         model = Team
-        fields = ('id', 'name', 'description', 'owner', 'url',)
-        extra_kwargs = {
-            'url': {'view_name': 'group-detail', 'lookup_field': 'pk'},
-            'users': {'lookup_field': 'username'}
-        }
+        fields = ('id', 'name', 'description', 'curator', 'members', 'url')

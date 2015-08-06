@@ -18,12 +18,12 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
-class GroupDetail(generics.RetrieveAPIView):
+class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
 
-class GroupList(generics.ListAPIView):
+class TeamList(generics.ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
