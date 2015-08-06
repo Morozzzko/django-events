@@ -10,11 +10,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     given_name = serializers.CharField(source='user.first_name')
     family_name = serializers.CharField(source='user.last_name')
     email = serializers.EmailField(source='user.email')
+    is_staff = serializers.BooleanField(source='user.is_staff')
 
     class Meta:
         model = Profile
         fields = ('id', 'username', 'given_name', 'additional_name', 'family_name', 'email', 'telephone', 'status',
-                  'url', )
+                  'is_staff', 'url', )
         extra_kwargs = {
             'url': {'view_name': 'user-detail', 'lookup_field': 'pk'},
             'users': {'lookup_field': 'username'}
