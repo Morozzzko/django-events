@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
-from .models import Event, Profile
+from .models import Event, Profile, Team
 
 
 class ProfileInline(admin.StackedInline):
@@ -28,3 +28,18 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     pass
+
+
+class TeamInline(admin.StackedInline):
+    can_delete = True
+    model = Team
+
+
+admin.site.unregister(Group)
+
+
+@admin.register(Group)
+class TeamAdmin(admin.ModelAdmin):
+    inlines = [
+        TeamInline,
+    ]

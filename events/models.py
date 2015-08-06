@@ -10,6 +10,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.utils.encoding import python_2_unicode_compatible
 
+from django.contrib.auth.models import Group
+
 from phonenumber_field.modelfields import PhoneNumberField
 
 from django_enumfield import enum
@@ -62,3 +64,13 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@python_2_unicode_compatible
+class Team(models.Model):
+    group = models.OneToOneField(Group)
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              verbose_name=_('owner'))
+    description = models.TextField(verbose_name=_('description'))
+
