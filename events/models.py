@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.db import models
+from django.db import models, IntegrityError
 
 from django.conf import settings
 
@@ -34,10 +34,21 @@ class PresenceStatus(enum.Enum):
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def sync_profile(sender, **kwargs):
-    profile, created = Profile.objects.get_or_create(pk=sender.pk, defaults={'status': PresenceStatus.ABSENT})
-    if created:
-        profile.save()
+def sync_profile(instance, **kwargs):
+    """
+    Make sure the Profile exists for each User.
+
+    Try to create an object
+
+    :param instance: An instance of 'sender' class that is being saved.
+    :type instance: settings.AUTH_USER_MODEL
+    :param kwargs: Optional keyword arguments
+    :type kwargs: dict
+    """
+    try:
+        Profile.objects.create(user=instance, status=PresenceStatus.ABSENT)
+    except IntegrityError:
+        pass
 
 
 @python_2_unicode_compatible

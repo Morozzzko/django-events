@@ -4,25 +4,13 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from django.contrib.auth.models import User, Group
 
 from .models import Event, Profile, Team
 
 
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = 'profile'
-
-
-admin.site.unregister(User)
-
-
-@admin.register(User)
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = [
-        ProfileInline,
-    ]
+    pass
 
 
 @admin.register(Event)
