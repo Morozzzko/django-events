@@ -7,28 +7,46 @@ from rest_framework import serializers
 from .models import Profile, Team
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField(source='user.pk')
-    username = serializers.CharField(source='user.username')
-    given_name = serializers.CharField(source='user.first_name')
-    family_name = serializers.CharField(source='user.last_name')
-    email = serializers.EmailField(source='user.email')
-    is_staff = serializers.BooleanField(source='user.is_staff')
+# class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+#     id = serializers.ReadOnlyField(source='user.pk')
+#     username = serializers.CharField(source='user.username')
+#     given_name = serializers.CharField(source='user.first_name')
+#     family_name = serializers.CharField(source='user.last_name')
+#     email = serializers.EmailField(source='user.email')
+#     is_staff = serializers.BooleanField(source='user.is_staff')
+#
+#     class Meta:
+#         model = Profile
+#         fields = ('id', 'username', 'given_name', 'additional_name', 'family_name', 'email', 'telephone', 'status',
+#                   'is_staff', 'url', )
+#         extra_kwargs = {
+#             'url': {'view_name': 'user-detail', 'lookup_field': 'pk'},
+#             'users': {'lookup_field': 'username'}
+#         }
 
+
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
-        fields = ('id', 'username', 'given_name', 'additional_name', 'family_name', 'email', 'telephone', 'status',
-                  'is_staff', 'url', )
-        extra_kwargs = {
-            'url': {'view_name': 'user-detail', 'lookup_field': 'pk'},
-            'users': {'lookup_field': 'username'}
-        }
+        model = Team
+        fields = ('')
 
 
 class MinimalUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'url', )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'url')
+
+    def to_representation(self, obj):
+        pass
+
+    def to_internal_value(self, data):
+        pass
 
 
 class TeamSerializer(serializers.ModelSerializer):

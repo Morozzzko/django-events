@@ -108,7 +108,6 @@ class Team(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class TeamMembership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     team = models.ForeignKey(Team)

@@ -2,19 +2,21 @@
 
 from __future__ import unicode_literals
 
-from rest_framework import generics
+from django.contrib.auth.models import User
+
+from rest_framework import generics, viewsets, permissions
 
 from .models import Profile, Team
 from .serializers import UserSerializer, TeamSerializer
 
 
 class UserList(generics.ListAPIView):
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class UserDetail(generics.RetrieveAPIView):
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
@@ -27,6 +29,3 @@ class TeamList(generics.ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
-
-def blank(request):
-    pass
