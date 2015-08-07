@@ -21,6 +21,7 @@ setup(
     install_requires=[
         'django-phonenumber-field',
         'django-enumfield',
+        'djangorestframework',
         'djangorestframework-camel-case',
     ],
     classifiers=[
