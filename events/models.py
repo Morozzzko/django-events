@@ -12,6 +12,10 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from django.contrib.auth.models import Group
 
+from django.db.models.signals import post_save
+
+from django.dispatch import receiver
+
 from phonenumber_field.modelfields import PhoneNumberField
 
 from django_enumfield import enum
@@ -27,6 +31,13 @@ class PresenceStatus(enum.Enum):
         PRESENT: _('present'),
         LEFT: _('left')
     }
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def sync_profile(sender, **kwargs):
+    profile, created = Profile.objects.get_or_create(pk=sender.pk, defaults={'status': PresenceStatus.ABSENT})
+    if created:
+        profile.save()
 
 
 @python_2_unicode_compatible
@@ -94,4 +105,3 @@ class TeamMembership(models.Model):
     role = models.TextField(verbose_name=_('role'),
                             max_length=30,
                             blank=True)
-

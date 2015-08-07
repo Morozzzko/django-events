@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
+
 from .models import Profile, Team
 
 
@@ -22,10 +25,26 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
+class MinimalUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'url', )
+
+
 class TeamSerializer(serializers.ModelSerializer):
-    curator = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True)
-    members = serializers.HyperlinkedRelatedField(many=True, view_name='user-detail', read_only=True)
+    curator = serializers.HyperlinkedRelatedField(view_name='user-detail',
+                                                  queryset=User.objects.all(),
+                                                  allow_null=True)
+    members = MinimalUserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
         fields = ('id', 'name', 'description', 'curator', 'members', 'url')
+
+    def to_representation(self, instance):
+        result = serializers.ModelSerializer.to_representation(self, instance)
+        if instance.curator:
+            result['curator'] = MinimalUserSerializer(context=self.context).to_representation(instance.curator)
+        return result
+
+
