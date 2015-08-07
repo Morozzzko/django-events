@@ -57,6 +57,11 @@ class Profile(models.Model):
     additional_name = models.CharField(verbose_name=_('middle name'),
                                        max_length=30,
                                        blank=True)
+
+    birth_date = models.DateField(verbose_name=_('birth date'),
+                                  blank=True,
+                                  null=True)
+
     telephone = PhoneNumberField(verbose_name=_('phone number'),
                                  blank=True)
 
