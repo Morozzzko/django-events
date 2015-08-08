@@ -16,8 +16,6 @@ from django.db.models.signals import post_save
 
 from django.dispatch import receiver
 
-from phonenumber_field.modelfields import PhoneNumberField
-
 from django_enumfield import enum
 
 
@@ -62,8 +60,10 @@ class Profile(models.Model):
                                   blank=True,
                                   null=True)
 
-    telephone = PhoneNumberField(verbose_name=_('phone number'),
-                                 blank=True)
+    telephone = models.CharField(max_length=20,
+                                 verbose_name=_('phone number'),
+                                 blank=True,
+                                 null=True)
 
     status = enum.EnumField(PresenceStatus,
                             verbose_name=_('presence status'),
