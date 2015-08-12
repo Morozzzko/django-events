@@ -44,6 +44,7 @@ def sync_profile(instance, **kwargs):
     :type kwargs: dict
     """
     try:
+        TeamMembership.objects.create(user=instance, team=None)
         Profile.objects.create(user=instance, status=PresenceStatus.ABSENT)
     except IntegrityError:
         pass
@@ -105,18 +106,15 @@ class Team(models.Model):
                                 null=True,
                                 related_name='team_curator')
 
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                     through='TeamMembership',
-                                     related_name='team_members')
-
     def __str__(self):
         return self.name
 
 
 class TeamMembership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    team = models.ForeignKey(Team)
-
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    team = models.ForeignKey(Team,
+                             blank=True,
+                             null=True)
     role = models.TextField(verbose_name=_('role'),
                             max_length=30,
                             blank=True)

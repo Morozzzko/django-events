@@ -7,17 +7,17 @@ from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions
 
 from .models import Profile, Team
-from .serializers import UserSerializer, TeamSerializer
+from .serializers import UserSerializer, TeamSerializer, ProfileSerializer
 
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserList(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserDetail(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 class TeamDetail(generics.RetrieveUpdateDestroyAPIView):

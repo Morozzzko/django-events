@@ -4,46 +4,63 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from .models import Profile, Team
+from collections import OrderedDict
 
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('additional_name', 'birth_date', 'telephone', )
+from .models import Profile, Team, TeamMembership
 
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(read_only=True)
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'is_staff', 'first_name', 'last_name', 'url', )
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['additional_name', 'birth_date', 'telephone',  ]
+
     def to_representation(self, instance):
-        representation_user = serializers.ModelSerializer.to_representation(self, instance)
-        profile = instance.profile
-        representation_profile = ProfileSerializer(context=self.context).to_representation(profile)
-        for key in ProfileSerializer.Meta.fields:
-            representation_user[key] = representation_profile[key]
-        return representation_user
+        representation_profile = super(ProfileSerializer, self).to_representation(instance)
+        user = instance.user
+        representation_user = UserSerializer(user, context=self.context).to_representation(user)
+        for key in representation_user:
+            representation_profile[key] = representation_user[key]
+        return representation_profile
 
     def to_internal_value(self, data):
-        return serializers.ModelSerializer.to_internal_value(self, data)
+        data_user = OrderedDict()
+        for key in ProfileSerializer.Meta.fields:
+            if key in data:
+                data_user[key] = data[key]
+                data.pop(key)
+
+        user_tmp = self.user
+        self.user = UserSerializer()
+        user_internal = UserSerializer(context=self.context, partial=True).to_internal_value(data_user)
+        self.user = user_tmp
+        return super(ProfileSerializer, self).to_internal_value(data)
 
 
-class TeamSerializer(serializers.ModelSerializer):
-    curator = serializers.HyperlinkedRelatedField(view_name='user-detail',
-                                                  queryset=User.objects.all(),
-                                                  allow_null=True)
-    members = UserSerializer(many=True, read_only=True)
+class TeamSerializer(serializers.HyperlinkedModelSerializer):
+    members = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Team
         fields = ('id', 'name', 'description', 'curator', 'members', 'url', )
+
+    def get_members(self, instance):
+        memberships = TeamMembership.objects.filter(team=instance)
+        members = (x.user for x in memberships)
+        profiles = Profile.objects.filter(user__in=members)
+        profiles_serialized = [ProfileSerializer(x, context=self.context).data for x in profiles]
+        return profiles_serialized
 
     def to_representation(self, instance):
         result = serializers.ModelSerializer.to_representation(self, instance)
         if instance.curator:
             result['curator'] = UserSerializer(context=self.context).to_representation(instance.curator)
         return result
-
-

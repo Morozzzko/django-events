@@ -20,6 +20,7 @@ setup(
     platforms=['any'],
     install_requires=[
         'django-enumfield',
+        'django-solo',
         'djangorestframework',
         'djangorestframework-camel-case',
     ],
