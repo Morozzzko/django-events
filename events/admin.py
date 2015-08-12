@@ -4,8 +4,9 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
+from solo.admin import SingletonModelAdmin
 
-from .models import Event, Profile, Team
+from .models import Event, Profile, Team, Event
 
 
 @admin.register(Profile)
@@ -14,7 +15,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 @admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(SingletonModelAdmin):
     pass
 
 

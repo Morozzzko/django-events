@@ -18,6 +18,8 @@ from django.dispatch import receiver
 
 from django_enumfield import enum
 
+from solo.models import SingletonModel
+
 
 class PresenceStatus(enum.Enum):
     ABSENT = 0
@@ -75,13 +77,17 @@ class Profile(models.Model):
 
 
 @python_2_unicode_compatible
-class Event(models.Model):
+class Event(SingletonModel):
     name = models.CharField(
         verbose_name=_('event name'),
         max_length=50
     )
-    start_date = models.DateTimeField(verbose_name=_('start date'))
-    end_date = models.DateTimeField(verbose_name=_('end date'))
+    start_date = models.DateTimeField(verbose_name=_('start date'),
+                                      blank=True,
+                                      null=True)
+    end_date = models.DateTimeField(verbose_name=_('end date'),
+                                    blank=True,
+                                    null=True)
     description = models.TextField(verbose_name=_('description'),
                                    blank=True)
     location = models.CharField(verbose_name=_('location'),
