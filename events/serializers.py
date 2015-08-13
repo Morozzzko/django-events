@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from django.shortcuts import get_object_or_404
+
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
@@ -20,13 +22,18 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
         return PresenceStatus.Options.label(instance.status)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     username = serializers.CharField(read_only=True)
+    status = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'is_staff', 'first_name', 'last_name', 'url', )
+        fields = ('id', 'username', 'email', 'is_staff', 'first_name', 'last_name', 'url', 'status', )
         depth = 2
+
+    def get_status(self, instance):
+        status = get_object_or_404(PresenceStatus, user=instance)
+        return StatusSerializer(status, context={'request': self.context['request']}).data
 
 
 class ProfileSerializer(serializers.ModelSerializer):
