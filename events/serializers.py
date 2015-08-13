@@ -12,7 +12,7 @@ from .models import Profile, Team, TeamMembership, PresenceStatus
 
 
 class StatusSerializer(serializers.HyperlinkedModelSerializer):
-    text = serializers.SerializerMethodField(read_only=True)
+    text = serializers.SerializerMethodField()
 
     class Meta:
         model = PresenceStatus
@@ -24,7 +24,7 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     username = serializers.CharField(read_only=True)
-    status = serializers.SerializerMethodField(read_only=True)
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = get_user_model()
@@ -65,7 +65,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
-    members = serializers.SerializerMethodField(read_only=True)
+    members = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
