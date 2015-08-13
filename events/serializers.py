@@ -43,7 +43,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation_profile = super(ProfileSerializer, self).to_representation(instance)
         user = instance.user
-        representation_user = UserSerializer(user, context=self.context).to_representation(user)
+        representation_user = UserSerializer(user, context={'request': self.context['request']}).to_representation(user)
         for key in representation_user:
             representation_profile[key] = representation_user[key]
         return representation_profile
@@ -57,7 +57,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         user_tmp = self.user
         self.user = UserSerializer()
-        user_internal = UserSerializer(context=self.context, partial=True).to_internal_value(data_user)
+        user_internal = UserSerializer(context={'request': self.context['request']}, partial=True)\
+            .to_internal_value(data_user)
         self.user = user_tmp
         return super(ProfileSerializer, self).to_internal_value(data)
 
@@ -73,12 +74,13 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         memberships = TeamMembership.objects.filter(team=instance)
         members = (x.user for x in memberships)
         profiles = Profile.objects.filter(user__in=members)
-        profiles_serialized = [ProfileSerializer(x, context=self.context).data for x in profiles]
+        profiles_serialized = [ProfileSerializer(x, context={'request': self.context['request']}).data for x in profiles]
         return profiles_serialized
 
     def to_representation(self, instance):
         result = serializers.ModelSerializer.to_representation(self, instance)
         if instance.curator:
-            result['curator'] = UserSerializer(context=self.context).to_representation(instance.curator)
+            result['curator'] = UserSerializer(context={'request': self.context['request']})\
+                .to_representation(instance.curator)
         return result
 
