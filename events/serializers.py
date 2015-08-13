@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
@@ -13,8 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('id', 'username', 'email', 'is_staff', 'first_name', 'last_name', 'url', )
+        depth = 2
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -64,3 +65,4 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         if instance.curator:
             result['curator'] = UserSerializer(context=self.context).to_representation(instance.curator)
         return result
+

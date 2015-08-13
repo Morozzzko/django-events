@@ -2,17 +2,17 @@
 
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-from rest_framework import generics, viewsets, permissions
+from rest_framework import viewsets
 
-from .models import Profile, Team
-from .serializers import UserSerializer, TeamSerializer, ProfileSerializer
+from .models import Team
+from .serializers import UserSerializer, TeamSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
 
 
 class TeamViewSet(viewsets.ModelViewSet):
