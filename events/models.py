@@ -35,12 +35,9 @@ def sync_profile(instance, **kwargs):
     :param kwargs: Optional keyword arguments
     :type kwargs: dict
     """
-    try:
-        TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
-        Profile.objects.get_or_create(user=instance)
-        PresenceStatus.objects.get_or_create(user=instance)
-    except IntegrityError:
-        pass
+    TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
+    Profile.objects.get_or_create(user=instance)
+    PresenceStatus.objects.get_or_create(user=instance)
 
 
 @python_2_unicode_compatible
@@ -69,8 +66,6 @@ class PresenceStatus(models.Model):
     def __str__(self):
         return _("{user} ({status})").format(user=str(self.user),
                                              status=PresenceStatus.Options.label(self.status))
-
-
 
 
 @python_2_unicode_compatible
