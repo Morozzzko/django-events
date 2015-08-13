@@ -10,22 +10,11 @@ from .models import Profile, Team
 from .serializers import UserSerializer, TeamSerializer, ProfileSerializer
 
 
-class UserList(generics.ListCreateAPIView):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
 
-class UserDetail(generics.RetrieveUpdateAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-
-
-class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
+class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
-
-
-class TeamList(generics.ListCreateAPIView):
-    queryset = Team.objects.all()
-    serializer_class = TeamSerializer
-
