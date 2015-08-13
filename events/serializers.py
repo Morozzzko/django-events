@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import get_object_or_404
-
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
@@ -32,7 +30,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         depth = 2
 
     def get_status(self, instance):
-        status = get_object_or_404(PresenceStatus, user=instance)
+        status = PresenceStatus.objects.get(user=instance)
         return StatusSerializer(status, context={'request': self.context['request']}).data
 
 

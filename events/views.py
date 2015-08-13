@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 
 from django.contrib.auth import get_user_model
 
-from django.shortcuts import get_object_or_404
-
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -20,7 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @detail_route(['GET'])
     def status(self, request, pk):
-        presence_status = get_object_or_404(PresenceStatus, user=pk)
+        presence_status = PresenceStatus.objects.get(user=pk)
         serializer = StatusSerializer(presence_status, context={'request': request})
         return Response(serializer.data)
 
