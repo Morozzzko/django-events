@@ -9,15 +9,15 @@ from collections import OrderedDict
 from .models import Profile, Team, TeamMembership, PresenceStatus
 
 
-class StatusSerializer(serializers.ModelSerializer):
+class StatusSerializer(serializers.HyperlinkedModelSerializer):
+    text = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = PresenceStatus
-        fields = ('user', 'status', 'last_modified', )
+        fields = ('user', 'status', 'last_modified', 'url', 'text', )
 
-    def to_representation(self, instance):
-        representation = super(StatusSerializer, self).to_representation(instance)
-        representation['text'] = PresenceStatus.Options.label(instance.status)
-        return representation
+    def get_text(self, instance):
+        return PresenceStatus.Options.label(instance.status)
 
 
 class UserSerializer(serializers.ModelSerializer):
