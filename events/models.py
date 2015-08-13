@@ -23,18 +23,6 @@ from django_enumfield import enum
 from solo.models import SingletonModel
 
 
-class PresenceStatus(enum.Enum):
-    ABSENT = 0
-    PRESENT = 1
-    LEFT = 2
-
-    labels = {
-        ABSENT: _('absent'),
-        PRESENT: _('present'),
-        LEFT: _('left')
-    }
-
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def sync_profile(instance, **kwargs):
     """
@@ -48,10 +36,41 @@ def sync_profile(instance, **kwargs):
     :type kwargs: dict
     """
     try:
-        TeamMembership.objects.create(user=instance, team=None)
-        Profile.objects.create(user=instance, status=PresenceStatus.ABSENT)
+        TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
+        Profile.objects.get_or_create(user=instance)
+        PresenceStatus.objects.get_or_create(user=instance)
     except IntegrityError:
         pass
+
+
+@python_2_unicode_compatible
+class PresenceStatus(models.Model):
+
+    class Options(enum.Enum):
+        ABSENT = 0
+        PRESENT = 1
+        LEFT = 2
+
+        labels = {
+            ABSENT: _('absent'),
+            PRESENT: _('present'),
+            LEFT: _('left')
+        }
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+
+    status = enum.EnumField(Options,
+                            default=Options.ABSENT,
+                            verbose_name=_('status'))
+
+    last_modified = models.DateTimeField(verbose_name=_("last-modified"),
+                                         auto_now=True)
+
+    def __str__(self):
+        return _("{user} ({status})").format(user=str(self.user),
+                                             status=PresenceStatus.Options.label(self.status))
+
+
 
 
 @python_2_unicode_compatible
@@ -69,10 +88,6 @@ class Profile(models.Model):
                                  verbose_name=_('phone number'),
                                  blank=True,
                                  null=True)
-
-    status = enum.EnumField(PresenceStatus,
-                            verbose_name=_('presence status'),
-                            default=PresenceStatus.ABSENT)
 
     def __str__(self):
         return str(self.user)

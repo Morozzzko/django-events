@@ -6,7 +6,18 @@ from rest_framework import serializers
 
 from collections import OrderedDict
 
-from .models import Profile, Team, TeamMembership
+from .models import Profile, Team, TeamMembership, PresenceStatus
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PresenceStatus
+        fields = ('user', 'status', 'last_modified', )
+
+    def to_representation(self, instance):
+        representation = super(StatusSerializer, self).to_representation(instance)
+        representation['text'] = PresenceStatus.Options.label(instance.status)
+        return representation
 
 
 class UserSerializer(serializers.ModelSerializer):
