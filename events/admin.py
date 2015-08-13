@@ -6,7 +6,7 @@ from django.contrib import admin
 
 from solo.admin import SingletonModelAdmin
 
-from .models import Event, Profile, Team, Event
+from .models import Event, Profile, Team, Event, TeamMembership
 
 
 @admin.register(Profile)
@@ -21,4 +21,9 @@ class EventAdmin(SingletonModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(TeamMembership)
+class TeamMembershipAdmin(admin.ModelAdmin):
     pass

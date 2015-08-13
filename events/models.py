@@ -14,6 +14,8 @@ from django.contrib.auth.models import Group
 
 from django.db.models.signals import post_save
 
+from django.core.exceptions import ValidationError
+
 from django.dispatch import receiver
 
 from django_enumfield import enum
@@ -116,6 +118,7 @@ class Team(models.Model):
         return self.name
 
 
+@python_2_unicode_compatible
 class TeamMembership(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     team = models.ForeignKey(Team,
@@ -124,3 +127,12 @@ class TeamMembership(models.Model):
     role = models.TextField(verbose_name=_('role'),
                             max_length=30,
                             blank=True)
+
+    def clean(self):
+        event = Event.get_solo()
+        if len(TeamMembership.objects.filter(team=self.team)) >= event.max_team_size:
+            raise ValidationError(_("team membership is limited to {max} members").format(max=event.max_team_size))
+        super(TeamMembership, self).clean()
+
+    def __str__(self):
+        return "{user} ({team})".format(user=str(self.user), team=str(self.team))
