@@ -3,6 +3,8 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
+from rest_framework.settings import api_settings
+from rest_framework.reverse import reverse
 
 from collections import OrderedDict
 
@@ -57,9 +59,20 @@ class StatusSerializer(FullAndShortModelSerializer):
         model = PresenceStatus
         fields = ('user', 'status', 'last_modified', 'text', 'url', )
         fields_short = ('status', 'text', 'url', )
+        extra_kwargs = {
+            'url': {'view_name': 'user-status'}
+        }
 
     def get_text(self, instance):
         return PresenceStatus.Options.label(instance.status)
+
+    def to_representation(self, instance):
+        representation = super(StatusSerializer, self).to_representation(instance)
+        if api_settings.URL_FIELD_NAME in representation:
+            request = self.context.get('request')
+            url = request.build_absolute_uri(reverse('user-status', args=[instance.user.pk]))
+            representation[api_settings.URL_FIELD_NAME] = url
+        return representation
 
 
 class UserSerializer(FullAndShortModelSerializer):
