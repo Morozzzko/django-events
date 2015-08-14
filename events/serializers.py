@@ -69,7 +69,8 @@ class UserSerializer(FullAndShortModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'is_staff', 'first_name', 'last_name', 'status', 'team', 'url', )
+        fields = ('id', 'username', 'email', 'first_name', 'last_name',
+                  'is_staff', 'is_superuser', 'status', 'team', 'url', )
         fields_short = ('username', 'first_name', 'last_name', 'status', 'url', )
         depth = 2
 
