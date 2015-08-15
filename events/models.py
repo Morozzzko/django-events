@@ -42,7 +42,6 @@ def sync_profile(instance, **kwargs):
 
 @python_2_unicode_compatible
 class PresenceStatus(models.Model):
-
     class Options(enum.Enum):
         ABSENT = 0
         PRESENT = 1
@@ -72,8 +71,8 @@ class PresenceStatus(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     middle_name = models.CharField(verbose_name=_('middle name'),
-                                       max_length=30,
-                                       blank=True)
+                                   max_length=30,
+                                   blank=True)
 
     birth_date = models.DateField(verbose_name=_('birth date'),
                                   blank=True,

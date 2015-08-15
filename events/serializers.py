@@ -37,7 +37,6 @@ class DynamicFieldsHyperlinkedModelSerializer(serializers.HyperlinkedModelSerial
 
 
 class FullAndShortModelSerializer(serializers.HyperlinkedModelSerializer):
-
     def __init__(self, *args, **kwargs):
         self.short = kwargs.pop('short', False)
 
@@ -57,8 +56,8 @@ class StatusSerializer(FullAndShortModelSerializer):
 
     class Meta:
         model = PresenceStatus
-        fields = ('user', 'status', 'last_modified', 'text', 'url', )
-        fields_short = ('status', 'text', 'url', )
+        fields = ('user', 'status', 'last_modified', 'text', 'url',)
+        fields_short = ('status', 'text', 'url',)
         extra_kwargs = {
             'url': {'view_name': 'user-status'}
         }
@@ -83,8 +82,8 @@ class UserSerializer(FullAndShortModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'email', 'first_name', 'last_name',
-                  'is_staff', 'is_superuser', 'status', 'team', 'url', )
-        fields_short = ('username', 'first_name', 'last_name', 'status', 'url', )
+                  'is_staff', 'is_superuser', 'status', 'team', 'url',)
+        fields_short = ('username', 'first_name', 'last_name', 'status', 'url',)
         depth = 2
 
     def get_status(self, instance):
@@ -103,7 +102,6 @@ class UserSerializer(FullAndShortModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ['additional_name', 'birth_date', 'telephone', ]
@@ -125,7 +123,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         user_tmp = self.user
         self.user = UserSerializer()
-        user_internal = UserSerializer(context={'request': self.context['request']}, partial=True)\
+        user_internal = UserSerializer(context={'request': self.context['request']}, partial=True) \
             .to_internal_value(data_user)
         self.user = user_tmp
         return super(ProfileSerializer, self).to_internal_value(data)
@@ -136,7 +134,7 @@ class TeamSerializer(FullAndShortModelSerializer):
 
     class Meta:
         model = Team
-        fields = ('id', 'name', 'description', 'curator', 'members', 'url', )
+        fields = ('id', 'name', 'description', 'curator', 'members', 'url',)
         fields_short = ('name', 'url',)
 
     def get_members(self, instance):
@@ -154,4 +152,3 @@ class TeamSerializer(FullAndShortModelSerializer):
                                                context={'request': self.context['request']},
                                                short=True).data
         return result
-
