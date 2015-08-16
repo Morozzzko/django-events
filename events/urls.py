@@ -37,6 +37,8 @@ team_detail = views.TeamViewSet.as_view({
 
 urlpatterns = format_suffix_patterns([
     url(r'^users/$', user_list, name='user-list'),
+    url(r'^users/attendees/$', user_list, {'type': 'attendees'}, name='user-list'),
+    url(r'^users/organizers/$', user_list, {'type': 'organizers'}, name='user-list'),
     url(r'^users/(?P<pk>[0-9]+)/$', user_detail, name='user-detail'),
     url(r'^users/(?P<pk>[0-9]+)/status/$', user_status, name='user-status'),
     url(r'^groups/$', team_list, name='team-list'),
