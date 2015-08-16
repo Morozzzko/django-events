@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @detail_route(['GET'])
     def status(self, request, pk):
-        presence_status = PresenceStatus.objects.get(user=pk)
+        presence_status, __ = PresenceStatus.objects.get_or_create(user=pk)
         serializer = StatusSerializer(presence_status, context={'request': request})
         return Response(serializer.data)
 

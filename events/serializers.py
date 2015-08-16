@@ -87,13 +87,13 @@ class UserSerializer(FullAndShortModelSerializer):
         depth = 2
 
     def get_status(self, instance):
-        status = PresenceStatus.objects.get(user=instance)
+        status, __ = PresenceStatus.objects.get_or_create(user=instance)
         return StatusSerializer(status,
                                 context={'request': self.context['request']},
                                 short=self.short).data
 
     def get_team(self, instance):
-        team_membership = TeamMembership.objects.get(user=instance)
+        team_membership, __ = TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
         if team_membership.team is None:
             return None
         return TeamSerializer(team_membership.team,
