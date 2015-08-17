@@ -75,7 +75,6 @@ class StatusSerializer(FullAndShortModelSerializer):
 
 
 class UserSerializer(FullAndShortModelSerializer):
-    username = serializers.CharField(read_only=True)
     status = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
 
@@ -84,6 +83,7 @@ class UserSerializer(FullAndShortModelSerializer):
         fields = ('id', 'username', 'email', 'first_name', 'last_name',
                   'is_staff', 'is_superuser', 'status', 'team', 'url',)
         fields_short = ('username', 'first_name', 'last_name', 'status', 'url',)
+        write_only_fields = ('password',)
         depth = 2
 
     def get_status(self, instance):
