@@ -78,13 +78,57 @@ class UserSerializer(FullAndShortModelSerializer):
     status = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
 
+    middle_name = serializers.CharField(source='profile.middle_name',
+                                        allow_blank=True,
+                                        allow_null=True)
+    telephone = serializers.CharField(source='profile.telephone',
+                                      allow_blank=True,
+                                      allow_null=True)
+
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'first_name', 'last_name',
+        fields = ('id', 'username', 'first_name', 'last_name', 'middle_name',
+                  'email', 'telephone',
                   'is_staff', 'is_superuser', 'status', 'team', 'url',)
         fields_short = ('username', 'first_name', 'last_name', 'status', 'url',)
+        read_only_fields = ('is_superuser',)
         write_only_fields = ('password',)
-        depth = 2
+
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+
+        for attr in validated_data.keys():
+            data = validated_data.get(attr, getattr(instance, attr))
+            setattr(instance, attr, data)
+
+        instance.save()
+
+        if profile_data:
+            for attr in profile_data:
+                setattr(instance.profile, attr, profile_data.get(attr))
+
+            instance.profile.save()
+
+        return instance
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile', None)
+
+        password = validated_data.pop('password', None)
+
+        instance = self.Meta.model(**validated_data)
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        if profile_data:
+            for attr in profile_data:
+                setattr(instance.profile, attr, profile_data.get(attr))
+            instance.profile.save()
+
+        return instance
 
     def get_status(self, instance):
         status, __ = PresenceStatus.objects.get_or_create(user=instance)
