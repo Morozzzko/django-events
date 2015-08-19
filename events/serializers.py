@@ -101,34 +101,6 @@ class UserSerializer(FullAndShortModelSerializer):
                               short=True).data
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['additional_name', 'birth_date', 'telephone', ]
-
-    def to_representation(self, instance):
-        representation_profile = super(ProfileSerializer, self).to_representation(instance)
-        user = instance.user
-        representation_user = UserSerializer(user, context={'request': self.context['request']}).to_representation(user)
-        for key in representation_user:
-            representation_profile[key] = representation_user[key]
-        return representation_profile
-
-    def to_internal_value(self, data):
-        data_user = OrderedDict()
-        for key in ProfileSerializer.Meta.fields:
-            if key in data:
-                data_user[key] = data[key]
-                data.pop(key)
-
-        user_tmp = self.user
-        self.user = UserSerializer()
-        user_internal = UserSerializer(context={'request': self.context['request']}, partial=True) \
-            .to_internal_value(data_user)
-        self.user = user_tmp
-        return super(ProfileSerializer, self).to_internal_value(data)
-
-
 class TeamSerializer(FullAndShortModelSerializer):
     members = serializers.SerializerMethodField()
 
