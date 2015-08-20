@@ -97,6 +97,11 @@ class UserSerializer(FullAndShortModelSerializer):
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)
 
+        password = validated_data.pop('password', None)
+
+        if password:
+            instance.set_password(password)
+
         for attr in validated_data.keys():
             data = validated_data.get(attr, getattr(instance, attr))
             setattr(instance, attr, data)
