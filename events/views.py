@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 
@@ -15,6 +15,9 @@ from .serializers import UserSerializer, TeamSerializer, StatusSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('last_name', 'first_name')
+    ordering = ('last_name', 'first_name')
 
     def get_queryset(self):
         user_type = self.kwargs.get('type', None)
@@ -34,3 +37,6 @@ class UserViewSet(viewsets.ModelViewSet):
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('name',)
+    ordering = ('name',)
