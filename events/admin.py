@@ -6,7 +6,7 @@ from django.contrib import admin
 
 from solo.admin import SingletonModelAdmin
 
-from .models import Event, Profile, Team, Event, TeamMembership
+from events.models import Event, Profile, Team, Event, TeamMembership
 
 
 @admin.register(Profile)

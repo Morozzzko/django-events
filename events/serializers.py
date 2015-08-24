@@ -6,9 +6,7 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 from rest_framework.reverse import reverse
 
-from collections import OrderedDict
-
-from .models import Profile, Team, TeamMembership, PresenceStatus
+from events.models import Team, TeamMembership, PresenceStatus
 
 
 class DynamicFieldsHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
@@ -58,7 +56,7 @@ class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TeamMembership
         fields = ('team_name', 'team', 'username', 'user', 'role', 'url',)
-        read_only_fields = ('user', 'username', 'team_name', )
+        read_only_fields = ('user', 'username', 'team_name',)
         extra_kwargs = {
             'url': {'view_name': 'user-team'}
         }
@@ -160,7 +158,7 @@ class UserSerializer(FullAndShortModelSerializer):
         if team_membership.team is None:
             return None
         return TeamMembershipSerializer(team_membership,
-                              context={'request': self.context['request']}).data
+                                        context={'request': self.context['request']}).data
 
 
 class TeamSerializer(FullAndShortModelSerializer):

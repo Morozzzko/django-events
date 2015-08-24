@@ -2,15 +2,13 @@
 
 from __future__ import unicode_literals
 
-from django.db import models, IntegrityError
+from django.db import models
 
 from django.conf import settings
 
 from django.utils.translation import ugettext_lazy as _
 
 from django.utils.encoding import python_2_unicode_compatible
-
-from django.contrib.auth.models import Group
 
 from django.db.models.signals import post_save
 
