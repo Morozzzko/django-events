@@ -55,16 +55,16 @@ class StatusViewSet(viewsets.GenericViewSet):
     serializer_class = StatusSerializer
 
     def retrieve(self, request, pk=None):
-        status = get_object_or_404(self.queryset, user=pk)
-        serializer = StatusSerializer(status, context={'request': request})
+        instance = get_object_or_404(self.queryset, user=pk)
+        serializer = StatusSerializer(instance, context={'request': request})
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        status = get_object_or_404(self.queryset, user=pk)
+        instance = get_object_or_404(self.queryset, user=pk)
         if type(request.data) == int:
-            serializer = StatusSerializer(status, data={'status': request.data}, context={'request': request})
+            serializer = StatusSerializer(instance, data={'status': request.data}, context={'request': request})
         else:
-            serializer = StatusSerializer(status, data=request.data, context={'request': request})
+            serializer = StatusSerializer(instance, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
