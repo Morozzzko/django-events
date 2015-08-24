@@ -58,6 +58,7 @@ class StatusSerializer(FullAndShortModelSerializer):
         model = PresenceStatus
         fields = ('user', 'status', 'last_modified', 'text', 'url',)
         fields_short = ('status', 'text', 'url',)
+        read_only_fields = ('user', 'last_modified', 'text',)
         extra_kwargs = {
             'url': {'view_name': 'user-status'}
         }

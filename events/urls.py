@@ -19,8 +19,9 @@ user_detail = views.UserViewSet.as_view({
     'delete': 'destroy'
 })
 
-user_status = views.UserViewSet.as_view({
-    'get': 'status',
+user_status = views.StatusViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
 })
 
 team_list = views.TeamViewSet.as_view({
