@@ -7,11 +7,22 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from rest_framework import viewsets, filters
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.views import APIView
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework.reverse import reverse_lazy
 
-from .models import Team, PresenceStatus, TeamMembership
-from .serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
+from events.models import Team, PresenceStatus, TeamMembership
+from events.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
+
+
+class APIEntry(APIView):
+    def get(self, request):
+        links = {
+            'teams': reverse_lazy('team-list', request=request),
+            'users': reverse_lazy('user-list', request=request),
+        }
+        return Response(links)
 
 
 class UserViewSet(viewsets.ModelViewSet):
