@@ -51,6 +51,19 @@ class FullAndShortModelSerializer(serializers.HyperlinkedModelSerializer):
                 self.fields.pop(field_name)
 
 
+class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    team_name = serializers.CharField(source='team.name', read_only=True)
+
+    class Meta:
+        model = TeamMembership
+        fields = ('team_name', 'team', 'username', 'user', 'role', 'url',)
+        read_only_fields = ('user', 'username', 'team_name', )
+        extra_kwargs = {
+            'url': {'view_name': 'user-team'}
+        }
+
+
 class StatusSerializer(FullAndShortModelSerializer):
     text = serializers.SerializerMethodField()
 
@@ -146,9 +159,8 @@ class UserSerializer(FullAndShortModelSerializer):
         team_membership, __ = TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
         if team_membership.team is None:
             return None
-        return TeamSerializer(team_membership.team,
-                              context={'request': self.context['request']},
-                              short=True).data
+        return TeamMembershipSerializer(team_membership,
+                              context={'request': self.context['request']}).data
 
 
 class TeamSerializer(FullAndShortModelSerializer):

@@ -24,6 +24,11 @@ user_status = views.StatusViewSet.as_view({
     'put': 'update',
 })
 
+user_team = views.TeamMembershipViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+})
+
 team_list = views.TeamViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -42,6 +47,7 @@ urlpatterns = format_suffix_patterns([
     url(r'^users/organizers/$', user_list, {'type': 'organizers'}, name='user-list'),
     url(r'^users/(?P<pk>[0-9]+)/$', user_detail, name='user-detail'),
     url(r'^users/(?P<pk>[0-9]+)/status/$', user_status, name='user-status'),
+    url(r'^users/(?P<pk>[0-9]+)/team/$', user_team, name='user-team'),
     url(r'^groups/$', team_list, name='team-list'),
     url(r'^groups/(?P<pk>[0-9]+)/$', team_detail, name='team-detail'),
 ], allowed=['json', 'html'])

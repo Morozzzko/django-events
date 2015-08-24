@@ -7,11 +7,11 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
-from .models import Team, PresenceStatus
-from .serializers import UserSerializer, TeamSerializer, StatusSerializer
+from .models import Team, PresenceStatus, TeamMembership
+from .serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -30,6 +30,24 @@ class UserViewSet(viewsets.ModelViewSet):
         presence_status, __ = PresenceStatus.objects.get_or_create(user=pk)
         serializer = StatusSerializer(presence_status, context={'request': request})
         return Response(serializer.data)
+
+
+class TeamMembershipViewSet(viewsets.GenericViewSet):
+    queryset = TeamMembership.objects.all()
+    serializer_class = TeamMembershipSerializer
+
+    def retrieve(self, request, pk=None):
+        instance = get_object_or_404(self.queryset, user=pk)
+        serializer = TeamMembershipSerializer(instance, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        instance = get_object_or_404(self.queryset, user=pk)
+        serializer = TeamMembershipSerializer(instance, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
 
 class StatusViewSet(viewsets.GenericViewSet):
