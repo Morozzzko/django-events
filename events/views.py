@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from rest_framework import viewsets
-from rest_framework.decorators import detail_route
+from rest_framework import viewsets, filters
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 
 from .models import Team, PresenceStatus, TeamMembership
@@ -16,6 +16,9 @@ from .serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamM
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('last_name', 'first_name')
+    ordering = ('last_name', 'first_name')
 
     def get_queryset(self):
         user_type = self.kwargs.get('type', None)
@@ -75,3 +78,6 @@ class StatusViewSet(viewsets.GenericViewSet):
 class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('name',)
+    ordering = ('name',)
