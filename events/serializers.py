@@ -152,7 +152,7 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
                 user,
                 context={'request': self.context['request']},
                 fields=self.Meta.fields_members).data
-            for key in user_data['team_membership'].keys() - self.Meta.fields_membership:
+            for key in set(user_data['team_membership'].keys()) - set(self.Meta.fields_membership):
                 user_data['team_membership'].pop(key, None)
             profiles_serialized.append(user_data)
         return profiles_serialized
