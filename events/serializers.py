@@ -46,6 +46,12 @@ class TeamMembershipSerializer(DynamicFieldsHyperlinkedModelSerializer):
             'url': {'view_name': 'user-team'}
         }
 
+    def to_representation(self, instance):
+        representation = super(TeamMembershipSerializer, self).to_representation(instance)
+        if 'team_name' in representation and representation['team_name'] is None:
+            representation['team_name'] = ""
+        return representation
+
 
 class StatusSerializer(DynamicFieldsHyperlinkedModelSerializer):
     text = serializers.SerializerMethodField()
@@ -80,8 +86,7 @@ class UserSerializer(DynamicFieldsHyperlinkedModelSerializer):
                                         allow_blank=True,
                                         allow_null=True)
     telephone = serializers.CharField(source='profile.telephone',
-                                      allow_blank=True,
-                                      allow_null=True)
+                                      allow_blank=True)
 
     class Meta:
         model = get_user_model()
@@ -158,9 +163,9 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
         return profiles_serialized
 
     def to_representation(self, instance):
-        result = serializers.ModelSerializer.to_representation(self, instance)
-        if instance.curator and not self.short:
-            result['curator'] = UserSerializer(instance.curator,
-                                               context={'request': self.context['request']},
-                                               fields=self.Meta.fields_curator).data
-        return result
+        representation = serializers.ModelSerializer.to_representation(self, instance)
+        if instance.curator:
+            representation['curator'] = UserSerializer(instance.curator,
+                                                       context={'request': self.context['request']},
+                                                       fields=self.Meta.fields_curator).data
+        return representation
