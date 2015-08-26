@@ -20,7 +20,11 @@ class APIEntry(APIView):
     def get(self, request):
         links = {
             'teams': reverse_lazy('team-list', request=request),
-            'users': reverse_lazy('user-list', request=request),
+            'users': {
+                'all': reverse_lazy('user-list', request=request),
+                'organizers': reverse_lazy('user-list-organizers', request=request),
+                'attendees': reverse_lazy('user-list-attendees', request=request),
+            },
         }
         return Response(links)
 
