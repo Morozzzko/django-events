@@ -61,7 +61,7 @@ class PresenceStatus(models.Model):
                                          auto_now=True)
 
     def __str__(self):
-        return _("{user} ({status})").format(user=str(self.user),
+        return _("{user} ({status})").format(user=self.user,
                                              status=PresenceStatus.Options.label(self.status))
 
 
@@ -82,7 +82,7 @@ class Profile(models.Model):
                                  null=True)
 
     def __str__(self):
-        return str(self.user)
+        return self.user
 
 
 @python_2_unicode_compatible
@@ -142,4 +142,4 @@ class TeamMembership(models.Model):
         super(TeamMembership, self).clean()
 
     def __str__(self):
-        return "{user} ({team})".format(user=str(self.user), team=str(self.team))
+        return str("{user} ({team})").format(user=self.user, team=self.team)
