@@ -124,6 +124,9 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
+    def get_members(self):
+        return [x.user for x in TeamMembership.objects.filter(team=self)]
+
 
 @python_2_unicode_compatible
 class TeamMembership(models.Model):
