@@ -142,4 +142,4 @@ class TeamMembership(models.Model):
         super(TeamMembership, self).clean()
 
     def __str__(self):
-        return str("{user} ({team})").format(user=self.user, team=self.team)
+        return "{user} ({team})".format(user=self.user, team=self.team)
