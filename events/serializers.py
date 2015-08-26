@@ -11,7 +11,7 @@ from events.models import Team, TeamMembership, PresenceStatus
 
 class DynamicFieldsHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
     """
-    A ModelSerializer that takes an additional `fields` argument that
+    A HyperlinkedModelSerializer that takes an additional `fields` argument that
     controls which fields should be displayed.
 
     Copied from
@@ -34,22 +34,7 @@ class DynamicFieldsHyperlinkedModelSerializer(serializers.HyperlinkedModelSerial
                 self.fields.pop(field_name)
 
 
-class FullAndShortModelSerializer(serializers.HyperlinkedModelSerializer):
-    def __init__(self, *args, **kwargs):
-        self.short = kwargs.pop('short', False)
-
-        assert hasattr(self.Meta, 'fields_short'), "FullAndShort model must specify fiels_short"
-
-        super(FullAndShortModelSerializer, self).__init__(*args, **kwargs)
-
-        if self.short:
-            fields = set(self.fields.keys())
-            fields_short = set(self.Meta.fields_short)
-            for field_name in fields - fields_short:
-                self.fields.pop(field_name)
-
-
-class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
+class TeamMembershipSerializer(DynamicFieldsHyperlinkedModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     team_name = serializers.CharField(source='team.name', read_only=True)
 
@@ -62,13 +47,12 @@ class TeamMembershipSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class StatusSerializer(FullAndShortModelSerializer):
+class StatusSerializer(DynamicFieldsHyperlinkedModelSerializer):
     text = serializers.SerializerMethodField()
 
     class Meta:
         model = PresenceStatus
         fields = ('user', 'status', 'last_modified', 'text', 'url',)
-        fields_short = ('status', 'text', 'url',)
         read_only_fields = ('user', 'last_modified', 'text',)
         extra_kwargs = {
             'url': {'view_name': 'user-status'}
@@ -86,9 +70,11 @@ class StatusSerializer(FullAndShortModelSerializer):
         return representation
 
 
-class UserSerializer(FullAndShortModelSerializer):
-    status = serializers.SerializerMethodField()
-    team = serializers.SerializerMethodField()
+class UserSerializer(DynamicFieldsHyperlinkedModelSerializer):
+    status = StatusSerializer(source='presencestatus',
+                              fields=('status', 'text', 'last_modified', 'url',))
+    team_membership = TeamMembershipSerializer(source='teammembership',
+                                               fields=('team', 'team_name', 'role', 'url',))
 
     middle_name = serializers.CharField(source='profile.middle_name',
                                         allow_blank=True,
@@ -100,9 +86,8 @@ class UserSerializer(FullAndShortModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'first_name', 'last_name', 'middle_name',
-                  'email', 'telephone',
-                  'is_staff', 'is_superuser', 'status', 'team', 'url',)
-        fields_short = ('username', 'first_name', 'last_name', 'status', 'url',)
+                  'email', 'telephone', 'team_membership',
+                  'is_staff', 'is_superuser', 'status', 'url',)
         read_only_fields = ('is_superuser',)
         write_only_fields = ('password',)
 
@@ -147,34 +132,29 @@ class UserSerializer(FullAndShortModelSerializer):
 
         return instance
 
-    def get_status(self, instance):
-        status, __ = PresenceStatus.objects.get_or_create(user=instance)
-        return StatusSerializer(status,
-                                context={'request': self.context['request']},
-                                short=self.short).data
 
-    def get_team(self, instance):
-        team_membership, __ = TeamMembership.objects.get_or_create(user=instance, defaults={'team': None})
-        if team_membership.team is None:
-            return None
-        return TeamMembershipSerializer(team_membership,
-                                        context={'request': self.context['request']}).data
-
-
-class TeamSerializer(FullAndShortModelSerializer):
+class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
     members = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
         fields = ('id', 'name', 'description', 'curator', 'members', 'url',)
-        fields_short = ('name', 'url',)
+        fields_curator = ('username', 'first_name', 'last_name', 'status', 'url',)
+        fields_members = ('username', 'first_name', 'last_name', 'status', 'team_membership', 'url',)
+        fields_membership = ('role', 'url',)
 
     def get_members(self, instance):
         memberships = TeamMembership.objects.filter(team=instance)
         members = [x.user for x in memberships]
-        profiles_serialized = [UserSerializer(x,
-                                              context={'request': self.context['request']},
-                                              short=True).data for x in members]
+        profiles_serialized = list()
+        for user in members:
+            user_data = UserSerializer(
+                user,
+                context={'request': self.context['request']},
+                fields=self.Meta.fields_members).data
+            for key in user_data['team_membership'].keys() - self.Meta.fields_membership:
+                user_data['team_membership'].pop(key, None)
+            profiles_serialized.append(user_data)
         return profiles_serialized
 
     def to_representation(self, instance):
@@ -182,5 +162,5 @@ class TeamSerializer(FullAndShortModelSerializer):
         if instance.curator and not self.short:
             result['curator'] = UserSerializer(instance.curator,
                                                context={'request': self.context['request']},
-                                               short=True).data
+                                               fields=self.Meta.fields_curator).data
         return result
