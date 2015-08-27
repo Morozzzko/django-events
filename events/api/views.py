@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 
 from events.models import Team, PresenceStatus, TeamMembership
-from events.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
+from events.api.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
 
 
 class APIEntry(APIView):
