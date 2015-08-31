@@ -144,8 +144,8 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
     class Meta:
         model = Team
         fields = ('id', 'name', 'description', 'curator', 'members', 'url',)
-        fields_curator = ('username', 'first_name', 'last_name', 'status', 'url',)
-        fields_members = ('username', 'first_name', 'last_name', 'status', 'team_membership', 'url',)
+        fields_curator = ('id', 'username', 'first_name', 'last_name', 'status', 'url',)
+        fields_members = ('id', 'username', 'first_name', 'last_name', 'status', 'team_membership', 'url',)
         fields_membership = ('role', 'url',)
 
     def get_members(self, instance):
