@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from rest_framework import viewsets, filters, status
+from rest_framework import viewsets, filters
 from rest_framework.views import APIView
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -67,7 +67,7 @@ class TeamMembershipViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors)
 
 
 class StatusViewSet(viewsets.GenericViewSet):
@@ -89,7 +89,7 @@ class StatusViewSet(viewsets.GenericViewSet):
             serializer.save()
             return Response(serializer.data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors)
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -107,7 +107,7 @@ class EventViewSet(viewsets.GenericViewSet):
     def retrieve(self, request):
         instance = Event.get_solo()
         serializer = EventSerializer(instance, context={'request': request})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
 
     def update(self, request):
         instance = Event.get_solo()
@@ -115,7 +115,7 @@ class EventViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors)
 
     def partial_update(self, request):
         instance = Event.get_solo()
@@ -123,4 +123,4 @@ class EventViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors)
