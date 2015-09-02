@@ -14,7 +14,7 @@ setup(
     url='https://miet.im/',
     author_email='team@miet.im',
     keywords="django",
-    packages=['events'],
+    packages=['events', 'events.api'],
     include_package_data=True,
     zip_safe=False,
     platforms=['any'],
