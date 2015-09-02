@@ -42,6 +42,12 @@ team_detail = views.TeamViewSet.as_view({
     'delete': 'destroy'
 })
 
+event_detail = views.EventViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+})
+
 urlpatterns = format_suffix_patterns(add_optional_trailing_slashes([
     url(r'^', views.APIEntry.as_view(), name='api'),
     url(r'^users/$', user_list, name='user-list'),
@@ -52,4 +58,5 @@ urlpatterns = format_suffix_patterns(add_optional_trailing_slashes([
     url(r'^users/(?P<pk>[0-9]+)/team/$', user_team, name='user-team'),
     url(r'^groups/$', team_list, name='team-list'),
     url(r'^groups/(?P<pk>[0-9]+)/$', team_detail, name='team-detail'),
+    url(r'event/', event_detail, name='event-detail')
 ]), allowed=['json', 'html'])
