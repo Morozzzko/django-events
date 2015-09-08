@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 from rest_framework.reverse import reverse
 
-from events.models import Team, TeamMembership, PresenceStatus
+from events.models import Team, TeamMembership, PresenceStatus, Event
 
 
 class DynamicFieldsHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
@@ -169,3 +169,9 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
                                                        context={'request': self.context['request']},
                                                        fields=self.Meta.fields_curator).data
         return representation
+
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ('name', 'start_date', 'end_date', 'description', 'location', 'max_team_size',)

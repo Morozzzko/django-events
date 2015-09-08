@@ -6,14 +6,15 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
 from rest_framework.views import APIView
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
 
-from events.models import Team, PresenceStatus, TeamMembership
-from events.api.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer
+from events.models import Team, PresenceStatus, TeamMembership, Event
+from events.api.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer, \
+    EventSerializer
 
 
 class APIEntry(APIView):
@@ -25,6 +26,7 @@ class APIEntry(APIView):
                 'organizers': reverse_lazy('user-list-organizers', request=request),
                 'attendees': reverse_lazy('user-list-attendees', request=request),
             },
+            'event': reverse_lazy('event-detail', request=request),
         }
         return Response(links)
 
@@ -65,7 +67,7 @@ class TeamMembershipViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StatusViewSet(viewsets.GenericViewSet):
@@ -87,7 +89,7 @@ class StatusViewSet(viewsets.GenericViewSet):
             serializer.save()
             return Response(serializer.data)
 
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -96,3 +98,29 @@ class TeamViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('name',)
     ordering = ('name',)
+
+
+class EventViewSet(viewsets.GenericViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    def retrieve(self, request):
+        instance = Event.get_solo()
+        serializer = EventSerializer(instance, context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request):
+        instance = Event.get_solo()
+        serializer = EventSerializer(instance, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request):
+        instance = Event.get_solo()
+        serializer = EventSerializer(instance, data=request.data, context={'request': request}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
