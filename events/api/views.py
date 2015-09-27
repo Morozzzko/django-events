@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse_lazy
+from rest_framework.permissions import IsAuthenticated
 
 from events.models import Team, PresenceStatus, TeamMembership, Event
 from events.api.serializers import UserSerializer, TeamSerializer, StatusSerializer, TeamMembershipSerializer, \
@@ -36,6 +37,7 @@ class UserViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('last_name', 'first_name')
     ordering = ('last_name', 'first_name')
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         user_type = self.kwargs.get('type', None)
@@ -55,6 +57,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class TeamMembershipViewSet(viewsets.GenericViewSet):
     queryset = TeamMembership.objects.all()
     serializer_class = TeamMembershipSerializer
+    permission_classes = (IsAuthenticated,)
 
     def retrieve(self, request, pk=None):
         instance = get_object_or_404(self.queryset, user=pk)
@@ -73,6 +76,7 @@ class TeamMembershipViewSet(viewsets.GenericViewSet):
 class StatusViewSet(viewsets.GenericViewSet):
     queryset = PresenceStatus.objects.all()
     serializer_class = StatusSerializer
+    permission_classes = (IsAuthenticated,)
 
     def retrieve(self, request, pk=None):
         instance = get_object_or_404(self.queryset, user=pk)
@@ -98,11 +102,13 @@ class TeamViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('name',)
     ordering = ('name',)
+    permission_classes = (IsAuthenticated,)
 
 
 class EventViewSet(viewsets.GenericViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = (IsAuthenticated,)
 
     def retrieve(self, request):
         instance = Event.get_solo()
