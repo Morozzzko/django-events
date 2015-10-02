@@ -4,27 +4,26 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from django.contrib.auth.models import User
+from solo.admin import SingletonModelAdmin
 
-from .models import Event, Profile
-
-
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = 'profile'
+from events.models import Event, Profile, Team, Event, TeamMembership
 
 
-admin.site.unregister(User)
-
-
-@admin.register(User)
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    inlines = [
-        ProfileInline,
-    ]
+    pass
 
 
 @admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
+class EventAdmin(SingletonModelAdmin):
+    pass
+
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(TeamMembership)
+class TeamMembershipAdmin(admin.ModelAdmin):
     pass

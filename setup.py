@@ -14,13 +14,15 @@ setup(
     url='https://miet.im/',
     author_email='team@miet.im',
     keywords="django",
-    packages=['events'],
+    packages=['events', 'events.api'],
     include_package_data=True,
     zip_safe=False,
     platforms=['any'],
     install_requires=[
-        'django-phonenumber-field',
         'django-enumfield',
+        'django-solo',
+        'djangorestframework',
+        'djangorestframework-camel-case',
     ],
     classifiers=[
         'Framework :: Django',

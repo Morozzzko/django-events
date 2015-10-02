@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0006_auto_20150804_1935'),
+        ('events', '0004_profile_birth_date'),
     ]
 
     operations = [
-        migrations.RenameField(
+        migrations.AlterField(
             model_name='profile',
-            old_name='additionalName',
-            new_name='additional_name',
+            name='telephone',
+            field=models.CharField(max_length=20, null=True, verbose_name='phone number', blank=True),
         ),
     ]
