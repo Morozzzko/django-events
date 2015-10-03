@@ -42,9 +42,9 @@ class TeamMembershipSerializer(DynamicFieldsHyperlinkedModelSerializer):
         model = TeamMembership
         fields = ('team_name', 'team', 'username', 'user', 'role', 'url',)
         read_only_fields = ('user', 'username', 'team_name',)
-
-    def to_representation(self, instance):
-        representation = super(TeamMembershipSerializer, self).to_representation(instance)
+        extra_kwargs = {
+            'url': {'view_name': 'user-team'}
+        }
 
     def to_representation(self, instance):
         representation = super(TeamMembershipSerializer, self).to_representation(instance)
