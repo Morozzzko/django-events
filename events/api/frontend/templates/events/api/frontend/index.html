@@ -1,0 +1,468 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8'>
+        <title></title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' href='{% static 'fonts/fonts.css'%}'>
+        <link rel='stylesheet' href='{% static 'css/style.css'%}'>
+        <link rel='icon' type='image/png' href='{% static 'i/favicon.png'%}'>
+    </head>
+
+    <body>
+        <div class='layout'>
+            <div class='sidebar'></div>
+            <div class='content'></div>
+        </div>
+
+        <!-- Templates -->
+        <script id='login' type='text/template'>
+            <div class="login-page">
+                <div class="lp-content">
+                    <div class="lp-field lp-field-username">
+                        <label class="lp-field__label" for="username">Логин</label>
+                        <input type="text" class="lp-field__input" id="username" autofocus>
+                        <span class="lp-field__error"></span>
+                    </div>
+
+                    <div class="lp-field lp-field-password">
+                        <label class="lp-field__label" for="password">Пароль</label>
+                        <input type="password" class="lp-field__input" id="password" autofocus>
+                        <span class="lp-field__error"></span>
+                    </div>
+
+                    <div class="lp-field lp-field-button">
+                        <button class="lp-field__button">Войти</button>
+                        <span class="lp-field__error"></span>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script id='sidebar' type='text/template'>
+            <aside class="sidebar">
+                <header class="sidebar-header">
+                    <button class="sidebar-header__nav-button" type="button">&#9776;</button>
+                    <h1 class="sidebar-header__logo">Хакатон МИЭТ</h1>
+                </header>
+
+                <div class="sidebar-panel sidebar-panel--hidden">
+                    <div class="sidebar-panel-top">
+                        <span class="sidebar-panel-top__icon-back"></span>
+                    </div>
+
+                    <nav class="sidebar-nav">
+                        <a href="#event" class="sidebar-nav__link sidebar-nav__link--event">Мероприятие</a>
+                        <a href="#groups" class="sidebar-nav__link sidebar-nav__link--groups">Группы</a>
+                        <a href="#attendees" class="sidebar-nav__link sidebar-nav__link--attendees">Участники</a>
+                        <a href="#organizers" class="sidebar-nav__link sidebar-nav__link--organizers">Организаторы</a>
+                    </nav>
+
+                    <div class="sidebar-profile">
+                        <a href="#/profile" class="sidebar-profile__link">
+                            <span class="sidebar-profile__avatar"></span>
+                            <span class="sidebar-profile__username">
+                                Пантелеймон Христарождественский
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </script>
+
+        <script id='event' type='text/template'>
+            <div class="event-page">
+            	<h1 class="ep__h1">Описание мероприятия</h1>
+
+            	<form class="ep-form">
+            		<div class="ep-field ep-field-name clearfix">
+            			<label class="ep-field__label" for="name">Название</label>
+            			<input value="<%= name %>" type="text" class="ep-field__input" id="name" autofocus>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-location clearfix">
+            			<label class="ep-field__label" for="location">Место проведения</label>
+            			<input value="<%= location %>" type="text" class="ep-field__input" id="location">
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-description clearfix">
+            			<label class="ep-field__label" for="description">Описание</label>
+            			<textarea style="resize: none" rows="3" class="ep-field__textarea" id="description"><%= description %></textarea>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-maxTeamSize clearfix">
+            			<label class="ep-field__label" for="maxTeamSize">Размер команды</label>
+            			<input value="<%= maxTeamSize %>" type="number" class="ep-field__input" id="maxTeamSize">
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-startDate clearfix">
+            			<label class="ep-field__label" for="startDate">Начало</label>
+            			<input  type="text" class="ep-field__input" id="startDate">
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-endDate clearfix">
+            			<label class="ep-field__label" for="endDate">Конец</label>
+            			<input type="text" class="ep-field__input" id="endDate">
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="ep-field ep-field-button">
+            			<button class="ep-field__button">Сохранить</button>
+            			<span class="ep-field__error"></span>
+            		</div>
+            	</form>
+            </div>
+        </script>
+
+        <script id='user_new' type='text/template'>
+            <div class="full-page">
+                <button class="fp__close">Закрыть</button>
+
+                <div class="fp-content clearfix"><div class="fp-content--float">
+                    <div class="fp-field fp-field-username">
+                        <label class="fp-field__label" for="username">Логин</label>
+                        <input type="text" class="fp-field__input" id="username" autofocus>
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-email">
+                        <label class="fp-field__label" for="email">Эл. почта</label>
+                        <input type="email" class="fp-field__input" id="email">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-team">
+                        <label class="fp-field__label">Команда</label>
+                    </div>
+
+                    <div class="fp-field fp-field-firstName">
+                        <label class="fp-field__label" for="firstName">Имя</label>
+                        <input type="text" class="fp-field__input" id="firstName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-lastName">
+                        <label class="fp-field__label" for="lastName">Фамилия</label>
+                        <input type="text" class="fp-field__input" id="lastName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-middleName">
+                        <label class="fp-field__label" for="middleName">Отчество</label>
+                        <input type="text" class="fp-field__input" id="middleName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-telephone">
+                        <label class="fp-field__label" for="telephone">Номер телефона</label>
+                        <input type="tel" class="fp-field__input" id="telephone" value="+7 ">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="fp-field fp-field-status">
+                        <input value="0" type="radio" name="status" class="fp-field__radio" id="fp-field-status__absent-input" checked>
+                        <label class="fp-field__label fp-field-status__absent-label" for="fp-field-status__absent-input">Не пришел</label>
+                        <input value="1" type="radio" name="status" class="fp-field__radio" id="fp-field-status__present-input">
+                        <label class="fp-field__label fp-field-status__present-label" for="fp-field-status__present-input">Пришел</label>
+                        <input value="2" type="radio" name="status" class="fp-field__radio" id="fp-field-status__left-input">
+                        <label class="fp-field__label fp-field-status__left-label" for="fp-field-status__left-input">Вышел</label>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="fp-field fp-field-isStaff">
+                        <label class="fp-field__label--checkbox" for="isStaff">
+                            <input type='checkbox' class="fp-field__input--checkbox" id="isStaff">
+                            Организатор
+                        </label>
+                    </div>
+
+                    <div class="fp-field fp-field-button">
+                        <button class="fp-field__button">Добавить</button>
+                        <span class="fp-field__error"></span>
+                    </div>
+                </div></div>
+            </div>
+        </script>
+        <script id='user_edit' type='text/template'>
+            <div class="full-page">
+                <button class="fp__close">Закрыть</button>
+
+                <div class="fp-content clearfix"><div class="fp-content--float">
+                    <div class="fp-field fp-field-username">
+                        <label class="fp-field__label" for="username">Логин</label>
+                        <input value="<%= username %>" type="text" class="fp-field__input" id="username" autofocus>
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-email">
+                        <label class="fp-field__label" for="email">Эл. почта</label>
+                        <input value="<%= email %>" type="email" class="fp-field__input" id="email">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-team">
+                        <label class="fp-field__label">Команда</label>
+                    </div>
+
+                    <div class="fp-field fp-field-firstName">
+                        <label class="fp-field__label" for="firstName">Имя</label>
+                        <input value="<%= firstName %>" type="text" class="fp-field__input" id="firstName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-lastName">
+                        <label class="fp-field__label" for="lastName">Фамилия</label>
+                        <input value="<%= lastName %>" type="text" class="fp-field__input" id="lastName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-middleName">
+                        <label class="fp-field__label" for="middleName">Отчество</label>
+                        <input value="<%= middleName %>" type="text" class="fp-field__input" id="middleName">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="fp-field fp-field-telephone">
+                        <label class="fp-field__label" for="telephone">Номер телефона</label>
+                        <input value="<%= telephone %>" type="tel" class="fp-field__input" id="telephone" value="+7 ">
+                        <span class="fp-field__error"></span>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="fp-field fp-field-status">
+                        <% if (status.status === 1) { %>
+                            <input value="0" type="radio" name="status" class="fp-field__radio" id="fp-field-status__absent-input">
+                            <label class="fp-field__label fp-field-status__absent-label" for="fp-field-status__absent-input">Не пришел</label>
+                            <input value="1" type="radio" name="status" class="fp-field__radio" id="fp-field-status__present-input">
+                            <label class="fp-field__label fp-field-status__present-label" for="fp-field-status__present-input" checked>Пришел</label>
+                            <input value="2" type="radio" name="status" class="fp-field__radio" id="fp-field-status__left-input">
+                            <label class="fp-field__label fp-field-status__left-label" for="fp-field-status__left-input">Вышел</label>
+                        <% } else if (status.status === 2) { %>
+                            <input value="0" type="radio" name="status" class="fp-field__radio" id="fp-field-status__absent-input">
+                            <label class="fp-field__label fp-field-status__absent-label" for="fp-field-status__absent-input">Не пришел</label>
+                            <input value="1" type="radio" name="status" class="fp-field__radio" id="fp-field-status__present-input">
+                            <label class="fp-field__label fp-field-status__present-label" for="fp-field-status__present-input">Пришел</label>
+                            <input value="2" type="radio" name="status" class="fp-field__radio" id="fp-field-status__left-input">
+                            <label class="fp-field__label fp-field-status__left-label" for="fp-field-status__left-input" checked>Вышел</label>
+                        <% } else { %>
+                            <input value="0" type="radio" name="status" class="fp-field__radio" id="fp-field-status__absent-input" checked>
+                            <label class="fp-field__label fp-field-status__absent-label" for="fp-field-status__absent-input">Не пришел</label>
+                            <input value="1" type="radio" name="status" class="fp-field__radio" id="fp-field-status__present-input">
+                            <label class="fp-field__label fp-field-status__present-label" for="fp-field-status__present-input">Пришел</label>
+                            <input value="2" type="radio" name="status" class="fp-field__radio" id="fp-field-status__left-input">
+                            <label class="fp-field__label fp-field-status__left-label" for="fp-field-status__left-input">Вышел</label>
+                        <% } %>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="fp-field fp-field-isStaff">
+                        <label class="fp-field__label--checkbox" for="isStaff">
+                            <% if (isStaff === true) { %>
+                                <input type='checkbox' class="fp-field__input--checkbox" id="isStaff" checked>
+                            <% } else if (isStaff === false) { %>
+                                <input type='checkbox' class="fp-field__input--checkbox" id="isStaff">
+                            <% } %>
+                            Организатор
+                        </label>
+                    </div>
+
+                    <div class="fp-field fp-field-button">
+                        <button class="fp-field__button">Сохранить</button>
+                        <span class="fp-field__error"></span>
+                    </div>
+                </div></div>
+            </div>
+        </script>
+
+        <script id='attendee_top' type='text/template'>
+            <div class="attendee-top clearfix">
+            	<button class="at__add-user-btn">Добавить участника</button>
+            	<button class="at__refresh-table-btn"></button>
+
+            	<form class="search">
+            		<input class="search__input" placeholder="Поиск участников" type="search">
+            		<button class="search__clear display-none" type="reset"></button>
+            	</form>
+            </div>
+        </script>
+
+        <script id='organizer_top' type='text/template'>
+            <div class="organizer-top clearfix">
+            	<button class="ot__add-user-btn">Добавить участника</button>
+            	<button class="ot__refresh-table-btn"></button>
+
+            	<form class="search">
+            		<input class="search__input" placeholder="Поиск участников" type="search">
+            		<button class="search__clear display-none" type="reset"></button>
+            	</form>
+            </div>
+        </script>
+
+        <script id='organizer_single' type='text/template'>
+            <span class="o-row-cell-name">
+            	<a href="#" class="o-row-cell-name__link">
+            		<% if ( firstName === null || lastName === null || firstName === '' || lastName === '' ) { %>
+            			Фамилия и имя не указаны
+            		<% } else { %>
+            			<%= lastName %> <%= firstName %>
+            		<% } %>
+            	</a>
+            </span>
+
+
+            <span class="o-row-cell-telephone">
+            	<% if ( telephone === null || telephone === '' ) { %>
+            		-
+            	<% } else { %>
+            		<%= telephone %>
+            	<% } %>
+            </span>
+
+            <span class="o-row-cell-delete">
+            	<a href="#" class="o-row-cell-delete__link">Удалить</a>
+            </span>
+        </script>
+
+        <script id='attendee_single' type='text/template'>
+            <span class="a-row-cell-name">
+            	<a href="#" class="a-row-cell-name__link">
+            		<% if (firstName === null || lastName === null || firstName === '' || lastName === '') { %>
+            			Фамилия и имя не указаны
+            		<% } else { %>
+            			<%= lastName %> <%= firstName %>
+            		<% } %>
+            	</a>
+            </span>
+
+            <span class="a-row-cell-group">
+            		Группа не указана
+            </span>
+
+            <span class="a-row-cell-status">
+            	<select class="a-row-cell-status__select">
+            		<% if (status.status === 1) { %>
+            			<option value="1">Пришел</option><option value="0">Не пришел</option><option value="2">Вышел</option>
+            		<% } else if (status.status === 2) { %>
+            			<option value="2">Вышел</option><option value="1">Пришел</option><option value="0">Не пришел</option>
+            		<% } else { %>
+            			<option value="0">Не пришел</option><option value="1">Пришел</option><option value="2">Вышел</option>
+            		<% } %>
+            	</select>
+            </span>
+
+            <span class="a-row-cell-delete">
+            	<a href="#" class="a-row-cell-delete__link">Удалить</a>
+            </span>
+        </script>
+
+        <script id='group_top' type='text/template'>
+            <div class="group-top clearfix">
+            	<button class="gt__add-group-btn">Добавить группу</button>
+            	<button class="gt__refresh-table-btn"></button>
+
+            	<form class="search">
+            		<input class="search__input" placeholder="Поиск по группам" type="search">
+            		<button class="search__clear display-none" type="reset"></button>
+            	</form>
+            </div>
+
+            <div class="gp-info"></div>
+        </script>
+
+        <script id='group_single' type='text/template'>
+            <div class="gp-card-top">
+            	<h2 class="gp-card-top__h2"><%= name %></h2>
+            	<div class="gp-card-top__delete"></div>
+            </div>
+            <div class="gp-card-bottom">
+            	<p class="gp-card-bottom__description"><%= description %></p>
+            	<a class="gp-card-bottom__edit" href="#">Подробнее</a>
+            </div>
+        </script>
+
+        <script id='group_new' type='text/template'>
+            <div class="full-page">
+            	<button class="fp__close">Закрыть</button>
+
+            	<form class="fp-content">
+            		<div class="fp-field fp-field-name">
+            			<label class="fp-field__label" for="name">Название</label>
+            			<input class="fp-field__input" id="name"></input>
+            			<span class="fp-field__error">В этом поле присутствует ошибка</span>
+            		</div>
+
+            		<div class="fp-field fp-field-description">
+            			<label class="fp-field__label" for="description">Описание</label>
+            			<textarea style="resize: none" rows="3" class="fp-field__textarea" id="description"></textarea>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-curator">
+            			<label class="fp-field__label">Куратор</label>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-members">
+            			<label class="fp-field__label">Участники</label>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-button">
+            			<button class="fp-field__button">Добавить группу</button>
+            			<span class="fp-field__error--top"></span>
+            		</div>
+            	</form>
+            </div>
+        </script>
+
+        <script id='group_edit' type='text/template'>
+            <div class="full-page">
+            	<button class="fp__close">Закрыть</button>
+
+            	<form class="fp-content">
+            		<div class="fp-field fp-field-name">
+            			<label class="fp-field__label" for="name">Название</label>
+            			<input value="<%= name %>" class="fp-field__input" id="name"></input>
+            			<span class="fp-field__error">В этом поле присутствует ошибка</span>
+            		</div>
+
+            		<div class="fp-field fp-field-description">
+            			<label class="fp-field__label" for="description">Описание</label>
+            			<textarea style="resize: none" rows="3" class="fp-field__textarea" id="description"><%= description %></textarea>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-curator">
+            			<label class="fp-field__label">Куратор</label>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-members">
+            			<label class="fp-field__label">Участники</label>
+            			<span class="fp-field__error"></span>
+            		</div>
+
+            		<div class="fp-field fp-field-button">
+            			<button class="fp-field__button">Сохранить группу</button>
+            			<span class="fp-field__error--top"></span>
+            		</div>
+            	</form>
+            </div>
+        </script>
+
+        <script src='{% static'js/app.js' %}'></script>
+    </body>
+</html>
