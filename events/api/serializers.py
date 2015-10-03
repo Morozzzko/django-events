@@ -147,6 +147,9 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
         fields_curator = ('id', 'username', 'first_name', 'last_name', 'status', 'url',)
         fields_members = ('id', 'username', 'first_name', 'last_name', 'status', 'team_membership', 'url',)
         fields_membership = ('role', 'url',)
+        extra_kwargs = {
+            'url': {'view_name': 'user-team'}
+        }
 
     def get_members(self, instance):
         memberships = TeamMembership.objects.filter(team=instance)
