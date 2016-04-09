@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
-def sample():
-    pass
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def frontend_view(request):
+    return render(request, 'events/api/frontend/index.html')
