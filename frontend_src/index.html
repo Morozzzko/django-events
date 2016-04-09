@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html lang='ru'>
     <head>
@@ -5,9 +6,9 @@
         <title></title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <link rel='stylesheet' href='fonts/fonts.css'>
-        <link rel='stylesheet' href='css/style.css'>
-        <link rel='icon' type='image/png' href='i/favicon.png'>
+        <link rel='stylesheet' href="{% static 'events/frontend/fonts/fonts.css' %}">
+        <link rel='stylesheet' href="{% static 'events/frontend/css/style.css' %}">
+        <link rel='icon' type='image/png' href="{% static 'events/frontend/i/favicon.png' %}">
     </head>
 
     <body>
@@ -68,6 +69,6 @@
             //= tpl/group_edit.html
         </script>
 
-        <script src='js/app.js'></script>
+        <script src="{% static 'events/frontend/js/app.js'%}"></script>
     </body>
 </html>

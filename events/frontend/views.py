@@ -6,4 +6,4 @@ from django.shortcuts import render
 
 @login_required
 def frontend_view(request):
-    return render(request, 'events/api/frontend/index.html')
+    return render(request, 'events/frontend/index.html')

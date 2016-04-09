@@ -1,5 +1,5 @@
 var User = Backbone.Model.extend({
-    urlRoot: 'http://miet.im/api/users/',
+    urlRoot: "{% url 'user-list' %}",
 
     defaults: {
         'username': 'unknown',

@@ -1,5 +1,5 @@
 var Group = Backbone.Model.extend({
-    urlRoot: 'http://miet.im/api/groups/',
+    urlRoot: "{% url 'group-list' %}",
 
     defaults: {
         'name': 'unknown',

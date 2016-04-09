@@ -1,5 +1,5 @@
 var Event = Backbone.Model.extend({
-    urlRoot: 'http://miet.im/api/event/',
+    urlRoot: "{% url 'event-detail' %}",
 
     defaults: {
         'name': '',
