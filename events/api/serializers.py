@@ -48,6 +48,10 @@ class TeamMembershipSerializer(DynamicFieldsHyperlinkedModelSerializer):
 
     def to_representation(self, instance):
         representation = super(TeamMembershipSerializer, self).to_representation(instance)
+        if api_settings.URL_FIELD_NAME in representation:
+            request = self.context.get('request')
+            url = request.build_absolute_uri(reverse('user-team', args=[instance.user.pk]))
+            representation[api_settings.URL_FIELD_NAME] = url
         if 'team_name' in representation and representation['team_name'] is None:
             representation['team_name'] = ""
         return representation
@@ -147,6 +151,9 @@ class TeamSerializer(DynamicFieldsHyperlinkedModelSerializer):
         fields_curator = ('id', 'username', 'first_name', 'last_name', 'status', 'url',)
         fields_members = ('id', 'username', 'first_name', 'last_name', 'status', 'team_membership', 'url',)
         fields_membership = ('role', 'url',)
+        extra_kwargs = {
+            'url': {'view_name': 'team-detail'}
+        }
 
     def get_members(self, instance):
         memberships = TeamMembership.objects.filter(team=instance)
