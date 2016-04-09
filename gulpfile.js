@@ -18,11 +18,11 @@ var gulp =
 
 var path = {
 	prod: {
-		html: 'prod/',
-		js: 'prod/js/',
-		css: 'prod/css/',
-		img: 'prod/i/',
-		fonts: 'prod/fonts/'
+		html: 'events/frontend/templates/frontend',
+		js: 'events/frontend/static/frontend/js/',
+		css: 'events/frontend/static/frontend/css/',
+		img: 'events/frontend/static/frontend/i/',
+		fonts: 'events/frontend/static/frontend/fonts/'
 	},
 	dev: {
 		html: 'frontend_src/*.html',
@@ -38,7 +38,7 @@ var path = {
 		img: 'frontend_src/i/**/*.*',
 		fonts: 'frontend_src/fonts/fonts.css'
 	},
-	clean: './prod'
+	clean: './events/frontend/*/frontend'
 };
 
 gulp.task('html:prod', function () {
@@ -114,7 +114,7 @@ gulp.task('webserver', function () {
 	browserSync({
 		open: false,
 		server: {
-			baseDir: "./prod/",
+			baseDir: "./events/frontend/templates/frontend/",
 		},
 		tunnel: true,
 		host: 'localhost',
@@ -123,7 +123,7 @@ gulp.task('webserver', function () {
 });
 
 gulp.task('clean', function (cb) {
-	rimraf(path.clean, cb);
+	rimraf(path.clean.static, cb);
 });
 
 gulp.task('default', ['prod', 'watch', 'webserver']);
