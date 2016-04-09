@@ -1,5 +1,5 @@
 var User = Backbone.Model.extend({
-    urlRoot: "{% url 'user-list' %}",
+    urlRoot: EVENT_API_USERS,
 
     defaults: {
         'username': 'unknown',

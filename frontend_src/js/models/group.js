@@ -1,5 +1,5 @@
 var Group = Backbone.Model.extend({
-    urlRoot: "{% url 'group-list' %}",
+    urlRoot: EVENT_API_GROUPS,
 
     defaults: {
         'name': 'unknown',

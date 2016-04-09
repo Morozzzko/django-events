@@ -1,5 +1,5 @@
 var Event = Backbone.Model.extend({
-    urlRoot: "{% url 'event-detail' %}",
+    urlRoot: EVENT_API_EVENT,
 
     defaults: {
         'name': '',

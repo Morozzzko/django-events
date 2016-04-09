@@ -69,6 +69,12 @@
             //= tpl/group_edit.html
         </script>
 
+        <script type="text/javascript">
+            var EVENT_API_EVENT = "{% url 'event-detail' %}";
+            var EVENT_API_GROUPS = "{% url 'team-list' %}";
+            var EVENT_API_USERS = "{% url 'user-list' %}";
+        </script>
+
         <script src="{% static 'events/frontend/js/app.js'%}"></script>
     </body>
 </html>
