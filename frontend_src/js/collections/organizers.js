@@ -1,6 +1,6 @@
 var Organizers = Backbone.Collection.extend({
     model: User,
-    url: 'http://miet.im/api/users/organizers?limit=10000/',
+    url: EVENT_API_ORGANIZERS,
 
     parse: function (response) {
         return response.results;

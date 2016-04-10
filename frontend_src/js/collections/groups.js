@@ -1,6 +1,6 @@
 var Groups = Backbone.Collection.extend({
     model: Group,
-    url: 'http://miet.im/api/groups/?format=json&limit=1000/',
+    url: EVENT_API_GROUPS_ALL,
 
     parse: function (response) {
         return response.results;

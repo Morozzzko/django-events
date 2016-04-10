@@ -62,7 +62,7 @@
             
                     <div class="sidebar-profile">
                         <a href="#/profile" class="sidebar-profile__link">
-                            <!--span class="sidebar-profile__avatar"></span-->
+                            <span class="sidebar-profile__avatar"></span>
                             <span class="sidebar-profile__username">
                                 {{ request.user.username }}
                             </span>
@@ -466,6 +466,10 @@
             var EVENT_API_EVENT = "{% url 'event-detail' %}";
             var EVENT_API_GROUPS = "{% url 'team-list' %}";
             var EVENT_API_USERS = "{% url 'user-list' %}";
+            var EVENT_API_ORGANIZERS = "{% url 'user-list-organizers' %}";
+            var EVENT_API_ATTENDEES = "{% url 'user-list-attendees' %}";
+            var EVENT_API_GROUPS_ALL = "{% url 'team-list' %}?limit=10000";
+            var EVENT_API_USERS_ALL = "{% url 'user-list' %}?limit=10000";
         </script>
 
         <script src="{% static 'events/frontend/js/app.js'%}"></script>

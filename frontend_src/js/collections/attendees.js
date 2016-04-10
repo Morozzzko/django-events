@@ -1,6 +1,6 @@
 var Attendees = Backbone.Collection.extend({
     model: User,
-    url: 'http://miet.im/api/users/attendees?limit=10000/',
+    url: EVENT_API_ATTENDEES,
 
     parse: function (response) {
         return response.results;

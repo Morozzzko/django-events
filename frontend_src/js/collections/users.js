@@ -1,6 +1,6 @@
 var Users = Backbone.Collection.extend({
     model: User,
-    url: 'http://miet.im/api/users/?limit=10000/',
+    url: EVENT_API_USERS_ALL,
 
     parse: function (response) {
         return response.results;
