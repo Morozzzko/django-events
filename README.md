@@ -11,6 +11,11 @@ This is an event management app which primary aim is to keep track of people who
 Features:
 
 * Presence status: never attended / attended, but left / attended
+* Groups
+    * assign a group to each attendee
+    * set which organizer is responsible for the group
+* Easily access information related to each team member including their phone number for quick calls
+* Set event information which you can use in your landing page
 * RESTful API designed with HATEOAS in mind
 * Backbone.js based frontend
 
@@ -45,9 +50,9 @@ urlpatterns = [
 ## Credits
 The project was developed by
 
-* Igor S. Morozov (@morozzzko) &mdash; backend and API
-* Vladislav Golubev (@strikepark) &mdash; frontend
-* Vladislav Verba (@VladX09) &mdash; Android application
+* Igor S. Morozov ([@Morozzzko](https://github.com/Morozzzko)) &mdash; backend and API
+* Vladislav Golubev ([@strikepark](https://github.com/strikepark)) &mdash; frontend
+* Vladislav Verba ([@VladX09](https://github.com/VladX09)) &mdash; Android application
 
 ## License
 The source code is licensed under BSD 3-Clause License.
