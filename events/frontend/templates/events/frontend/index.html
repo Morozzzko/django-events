@@ -470,6 +470,14 @@
             var EVENT_API_ATTENDEES = "{% url 'user-list-attendees' %}";
             var EVENT_API_GROUPS_ALL = "{% url 'team-list' %}?limit=10000";
             var EVENT_API_USERS_ALL = "{% url 'user-list' %}?limit=10000";
+            var EVENT_DEFAULTS = {
+                'name': '{{ event.name }}',
+                'description': '{{ event.description }}',
+                'location': '{{ event.location|escapejs }}',
+                'maxTeamSize': {{ event.max_team_size|escapejs}},
+                'startDate': '{{ event.start_date|escapejs}}',
+                'endDate': '{{ event.end_date|escapejs }}'
+            };
         </script>
 
         <script src="{% static 'events/frontend/js/app.js'%}"></script>

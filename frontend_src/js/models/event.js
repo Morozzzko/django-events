@@ -1,14 +1,7 @@
 var Event = Backbone.Model.extend({
     urlRoot: EVENT_API_EVENT,
 
-    defaults: {
-        'name': '',
-        'description': '',
-        'location': '',
-        'maxTeamSize': null,
-        'startDate': null,
-        'endDate': null
-    },
+    defaults: EVENT_DEFAULTS,
 
     validate: function (attrs) {
         var errors = [];
