@@ -1,0 +1,92 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{ site_title }}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <link rel='stylesheet' href="{% static 'events/frontend/fonts/fonts.css' %}">
+        <link rel='stylesheet' href="{% static 'events/frontend/css/style.css' %}">
+        <link rel='icon' type='image/png' href="{% static 'events/frontend/i/favicon.png' %}">
+    </head>
+
+    <body>
+        <div class='layout'>
+            <div class='sidebar'></div>
+            <div class='content'></div>
+        </div>
+
+        <!-- Templates -->
+        <script id='login' type='text/template'>
+            //= tpl/login.html
+        </script>
+
+        <script id='sidebar' type='text/template'>
+            //= tpl/sidebar.html
+        </script>
+
+        <script id='event' type='text/template'>
+            //= tpl/event.html
+        </script>
+
+        <script id='user_new' type='text/template'>
+            //= tpl/user_new.html
+        </script>
+        <script id='user_edit' type='text/template'>
+            //= tpl/user_edit.html
+        </script>
+
+        <script id='attendee_top' type='text/template'>
+            //= tpl/attendee_top.html
+        </script>
+
+        <script id='organizer_top' type='text/template'>
+            //= tpl/organizer_top.html
+        </script>
+
+        <script id='organizer_single' type='text/template'>
+            //= tpl/organizer_single.html
+        </script>
+
+        <script id='attendee_single' type='text/template'>
+            //= tpl/attendee_single.html
+        </script>
+
+        <script id='group_top' type='text/template'>
+            //= tpl/group_top.html
+        </script>
+
+        <script id='group_single' type='text/template'>
+            //= tpl/group_single.html
+        </script>
+
+        <script id='group_new' type='text/template'>
+            //= tpl/group_new.html
+        </script>
+
+        <script id='group_edit' type='text/template'>
+            //= tpl/group_edit.html
+        </script>
+
+        <script type="text/javascript">
+            var EVENT_API_EVENT = "{% url 'event-detail' %}";
+            var EVENT_API_GROUPS = "{% url 'team-list' %}";
+            var EVENT_API_USERS = "{% url 'user-list' %}";
+            var EVENT_API_ORGANIZERS = "{% url 'user-list-organizers' %}";
+            var EVENT_API_ATTENDEES = "{% url 'user-list-attendees' %}";
+            var EVENT_API_GROUPS_ALL = "{% url 'team-list' %}?limit=10000";
+            var EVENT_API_USERS_ALL = "{% url 'user-list' %}?limit=10000";
+            var EVENT_DEFAULTS = {
+                'name': '{{ event.name }}',
+                'description': '{{ event.description }}',
+                'location': '{{ event.location|escapejs }}',
+                'maxTeamSize': {{ event.max_team_size|escapejs}},
+                'startDate': '{{ event.start_date|escapejs}}',
+                'endDate': '{{ event.end_date|escapejs }}'
+            };
+        </script>
+
+        <script src="{% static 'events/frontend/js/app.js'%}"></script>
+    </body>
+</html>
