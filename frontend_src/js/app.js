@@ -40,7 +40,7 @@ Backbone.sync = function(method, model, options) {
 	// console.log(base64_encode('strikepark' + ':' + '1234'));
 
 	options.headers = {
-		'Сookie': document.cookie,
+		'Cookie': document.cookie,
 		// "Authorization": "Basic " + btoa('strikepark' + ":" + '1234')
 	};
 
