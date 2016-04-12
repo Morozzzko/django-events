@@ -18,6 +18,10 @@ Features:
 * Set event information which you can use in your landing page
 * RESTful API designed with HATEOAS in mind
 * Backbone.js based frontend
+## Screenshots
+![groups](.github/groups.png)
+
+![users](.github/users.png)
 
 ## Install
 
